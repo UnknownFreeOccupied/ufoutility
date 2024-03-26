@@ -44,6 +44,7 @@
 
 // STL
 #include <chrono>
+#include <cmath>
 #include <cstdlib>
 
 namespace ufo
@@ -59,6 +60,14 @@ class Timer
 
 	[[nodiscard]] bool active() const;
 
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double current() const
+	{
+		return toDouble<Period>(active()
+		                            ? std::chrono::high_resolution_clock::now() - start_
+		                            : std::chrono::high_resolution_clock::duration::zero());
+	}
+
 	[[nodiscard]] double currentSeconds() const;
 
 	[[nodiscard]] double currentMilliseconds() const;
@@ -66,6 +75,12 @@ class Timer
 	[[nodiscard]] double currentMicroseconds() const;
 
 	[[nodiscard]] double currentNanoseconds() const;
+
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double last() const
+	{
+		return toDouble<Period>(last_);
+	}
 
 	[[nodiscard]] double lastSeconds() const;
 
@@ -75,6 +90,12 @@ class Timer
 
 	[[nodiscard]] double lastNanoseconds() const;
 
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double total() const
+	{
+		return current<Period>() + toDouble<Period>(total_);
+	}
+
 	[[nodiscard]] double totalSeconds() const;
 
 	[[nodiscard]] double totalMilliseconds() const;
@@ -82,6 +103,13 @@ class Timer
 	[[nodiscard]] double totalMicroseconds() const;
 
 	[[nodiscard]] double totalNanoseconds() const;
+
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double min() const
+	{
+		return 0 < numSamples() ? toDouble<Period>(min_)
+		                        : std::numeric_limits<double>::quiet_NaN();
+	}
 
 	[[nodiscard]] double minSeconds() const;
 
@@ -91,6 +119,13 @@ class Timer
 
 	[[nodiscard]] double minNanoseconds() const;
 
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double max() const
+	{
+		return 0 < numSamples() ? toDouble<Period>(max_)
+		                        : std::numeric_limits<double>::quiet_NaN();
+	}
+
 	[[nodiscard]] double maxSeconds() const;
 
 	[[nodiscard]] double maxMilliseconds() const;
@@ -98,6 +133,12 @@ class Timer
 	[[nodiscard]] double maxMicroseconds() const;
 
 	[[nodiscard]] double maxNanoseconds() const;
+
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double mean() const
+	{
+		return toDouble<Period>(mean_);
+	}
 
 	[[nodiscard]] double meanSeconds() const;
 
@@ -107,6 +148,12 @@ class Timer
 
 	[[nodiscard]] double meanNanoseconds() const;
 
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double variance() const
+	{
+		return sampleVariance<Period>();
+	}
+
 	[[nodiscard]] double varianceSeconds() const;
 
 	[[nodiscard]] double varianceMilliseconds() const;
@@ -114,6 +161,12 @@ class Timer
 	[[nodiscard]] double varianceMicroseconds() const;
 
 	[[nodiscard]] double varianceNanoseconds() const;
+
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double std() const
+	{
+		return std::sqrt(variance<Period>());
+	}
 
 	[[nodiscard]] double stdSeconds() const;
 
@@ -123,6 +176,13 @@ class Timer
 
 	[[nodiscard]] double stdNanoseconds() const;
 
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double sampleVariance() const
+	{
+		return 1 < numSamples() ? Period::den * Period::den * (variance_ / (numSamples() - 1))
+		                        : std::numeric_limits<double>::quiet_NaN();
+	}
+
 	[[nodiscard]] double sampleVarianceSeconds() const;
 
 	[[nodiscard]] double sampleVarianceMilliseconds() const;
@@ -130,6 +190,13 @@ class Timer
 	[[nodiscard]] double sampleVarianceMicroseconds() const;
 
 	[[nodiscard]] double sampleVarianceNanoseconds() const;
+
+	template <class Period = std::chrono::seconds::period>
+	[[nodiscard]] double populationVariance() const
+	{
+		return 1 < numSamples() ? Period::den * Period::den * (variance_ / numSamples())
+		                        : std::numeric_limits<double>::quiet_NaN();
+	}
 
 	[[nodiscard]] double populationVarianceSeconds() const;
 
@@ -142,7 +209,11 @@ class Timer
 	[[nodiscard]] std::size_t numSamples() const;
 
  private:
-	[[nodiscard]] std::chrono::high_resolution_clock::duration current() const;
+	template <class Period, class Duration>
+	[[nodiscard]] static constexpr double toDouble(Duration dur)
+	{
+		return std::chrono::duration<double, Period>(dur).count();
+	}
 
  private:
 	std::chrono::time_point<std::chrono::high_resolution_clock> start_ = {};
@@ -154,7 +225,6 @@ class Timer
 	    std::chrono::high_resolution_clock::duration::zero();
 	std::chrono::duration<double, std::chrono::high_resolution_clock::period> mean_ =
 	    std::chrono::duration<double, std::chrono::high_resolution_clock::period>::zero();
-	// std::chrono::duration<double> variance_ = std::chrono::duration<double>::zero();
 	double                                       variance_ = 0.0;
 	std::chrono::high_resolution_clock::duration min_ =
 	    std::chrono::high_resolution_clock::duration::max();

@@ -5,8 +5,9 @@
 #include <catch2/catch_test_macros.hpp>
 
 // STL
+#include <iomanip>
 #include <iostream>
-#include <thread>
+// #include <thread>
 
 TEST_CASE("Timer")
 {
@@ -14,7 +15,9 @@ TEST_CASE("Timer")
 
 	ufo::Timer t;
 
-	for (std::size_t i{}; 25 > i; ++i) {
+	std::cout << std::setprecision(10);
+
+	for (std::size_t i{}; 5 > i; ++i) {
 		t.start();
 		// std::this_thread::sleep_for(1s);
 		t.stop();
