@@ -15,5 +15,5 @@ TEST_CASE("Timing")
 	t[1][2].stop();
 	t[1].stop();
 
-	t.printSeconds(true, true, true, 1, 10);
+	t.printNanoseconds(true, true, true, 1, 10);
 }
