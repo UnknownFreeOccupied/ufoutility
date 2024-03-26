@@ -1,2 +1,2 @@
-# ufoutility
+# UFOUtility
 The UFO utility library
