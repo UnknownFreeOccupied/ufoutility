@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.5...3.16)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR AND NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+
 project(ufoutility
 	VERSION 2.0.0
 	DESCRIPTION "The UFO utility library"
@@ -36,6 +42,17 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
 
 # Only enable tests when we're the root project
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+	# Treat warnings as errors
+	set_target_properties(ufoutility PROPERTIES COMPILE_WARNING_AS_ERROR ON)
+
+	# Turn all warnings on
+	if (MSVC)
+		target_compile_options(ufoutility PUBLIC /W4)
+	else()
+		target_compile_options(ufoutility PUBLIC -Wall -Wextra -pedantic)
+	endif()
+
+	add_subdirectory(docs)
   add_subdirectory(tests)
 endif()
 

@@ -44,9 +44,8 @@ std::string const& Timing::color() const { return color_; }
 void Timing::setColor(std::string const& color) { color_ = color; }
 
 void Timing::printSeconds(bool first_as_tag, bool random_colors, bool bold,
-                          std::size_t start_numbering_level,
-                          std::size_t stop_numbering_level,
-                          std::size_t group_colors_level, int precision) const
+                          int start_numbering_level, int stop_numbering_level,
+                          int group_colors_level, int precision) const
 {
 	print<std::chrono::seconds::period>(first_as_tag, random_colors, bold,
 	                                    start_numbering_level, stop_numbering_level,
@@ -54,9 +53,8 @@ void Timing::printSeconds(bool first_as_tag, bool random_colors, bool bold,
 }
 
 void Timing::printMilliseconds(bool first_as_tag, bool random_colors, bool bold,
-                               std::size_t start_numbering_level,
-                               std::size_t stop_numbering_level,
-                               std::size_t group_colors_level, int precision) const
+                               int start_numbering_level, int stop_numbering_level,
+                               int group_colors_level, int precision) const
 {
 	print<std::chrono::milliseconds::period>(first_as_tag, random_colors, bold,
 	                                         start_numbering_level, stop_numbering_level,
@@ -64,9 +62,8 @@ void Timing::printMilliseconds(bool first_as_tag, bool random_colors, bool bold,
 }
 
 void Timing::printMicroseconds(bool first_as_tag, bool random_colors, bool bold,
-                               std::size_t start_numbering_level,
-                               std::size_t stop_numbering_level,
-                               std::size_t group_colors_level, int precision) const
+                               int start_numbering_level, int stop_numbering_level,
+                               int group_colors_level, int precision) const
 {
 	print<std::chrono::microseconds::period>(first_as_tag, random_colors, bold,
 	                                         start_numbering_level, stop_numbering_level,
@@ -74,9 +71,8 @@ void Timing::printMicroseconds(bool first_as_tag, bool random_colors, bool bold,
 }
 
 void Timing::printNanoseconds(bool first_as_tag, bool random_colors, bool bold,
-                              std::size_t start_numbering_level,
-                              std::size_t stop_numbering_level,
-                              std::size_t group_colors_level, int precision) const
+                              int start_numbering_level, int stop_numbering_level,
+                              int group_colors_level, int precision) const
 {
 	print<std::chrono::nanoseconds::period>(first_as_tag, random_colors, bold,
 	                                        start_numbering_level, stop_numbering_level,
@@ -113,8 +109,7 @@ void Timing::timingsRecurs(std::vector<TimingNL>& data, std::size_t num, int lev
 }
 
 void Timing::addTags(std::vector<std::string>& data, std::vector<TimingNL> const& timers,
-                     std::size_t start_numbering_level,
-                     std::size_t stop_numbering_level) const
+                     int start_numbering_level, int stop_numbering_level) const
 {
 	for (auto const& t : timers) {
 		if (start_numbering_level <= t.level && t.level <= stop_numbering_level) {

@@ -109,10 +109,10 @@ class Timing : public Timer
 
 	template <class Period = std::chrono::seconds::period>
 	void print(bool first_as_tag = false, bool random_colors = false, bool bold = false,
-	           std::size_t start_numbering_level = 1,
-	           std::size_t stop_numbering_level  = std::numeric_limits<std::size_t>::max(),
-	           std::size_t group_colors_level    = std::numeric_limits<std::size_t>::max(),
-	           int         precision             = 4) const
+	           int start_numbering_level = 1,
+	           int stop_numbering_level  = std::numeric_limits<int>::max(),
+	           int group_colors_level    = std::numeric_limits<int>::max(),
+	           int precision             = 4) const
 	{
 		if (first_as_tag) {
 			printf("%s timings", tag().c_str());
@@ -205,33 +205,29 @@ class Timing : public Timer
 		}
 	}
 
-	void printSeconds(
-	    bool first_as_tag = false, bool random_colors = false, bool bold = false,
-	    std::size_t start_numbering_level = 1,
-	    std::size_t stop_numbering_level  = std::numeric_limits<std::size_t>::max(),
-	    std::size_t group_colors_level    = std::numeric_limits<std::size_t>::max(),
-	    int         precision             = 4) const;
+	void printSeconds(bool first_as_tag = false, bool random_colors = false,
+	                  bool bold = false, int start_numbering_level = 1,
+	                  int stop_numbering_level = std::numeric_limits<int>::max(),
+	                  int group_colors_level   = std::numeric_limits<int>::max(),
+	                  int precision            = 4) const;
 
-	void printMilliseconds(
-	    bool first_as_tag = false, bool random_colors = false, bool bold = false,
-	    std::size_t start_numbering_level = 1,
-	    std::size_t stop_numbering_level  = std::numeric_limits<std::size_t>::max(),
-	    std::size_t group_colors_level    = std::numeric_limits<std::size_t>::max(),
-	    int         precision             = 4) const;
+	void printMilliseconds(bool first_as_tag = false, bool random_colors = false,
+	                       bool bold = false, int start_numbering_level = 1,
+	                       int stop_numbering_level = std::numeric_limits<int>::max(),
+	                       int group_colors_level   = std::numeric_limits<int>::max(),
+	                       int precision            = 4) const;
 
-	void printMicroseconds(
-	    bool first_as_tag = false, bool random_colors = false, bool bold = false,
-	    std::size_t start_numbering_level = 1,
-	    std::size_t stop_numbering_level  = std::numeric_limits<std::size_t>::max(),
-	    std::size_t group_colors_level    = std::numeric_limits<std::size_t>::max(),
-	    int         precision             = 4) const;
+	void printMicroseconds(bool first_as_tag = false, bool random_colors = false,
+	                       bool bold = false, int start_numbering_level = 1,
+	                       int stop_numbering_level = std::numeric_limits<int>::max(),
+	                       int group_colors_level   = std::numeric_limits<int>::max(),
+	                       int precision            = 4) const;
 
-	void printNanoseconds(
-	    bool first_as_tag = false, bool random_colors = false, bool bold = false,
-	    std::size_t start_numbering_level = 1,
-	    std::size_t stop_numbering_level  = std::numeric_limits<std::size_t>::max(),
-	    std::size_t group_colors_level    = std::numeric_limits<std::size_t>::max(),
-	    int         precision             = 4) const;
+	void printNanoseconds(bool first_as_tag = false, bool random_colors = false,
+	                      bool bold = false, int start_numbering_level = 1,
+	                      int stop_numbering_level = std::numeric_limits<int>::max(),
+	                      int group_colors_level   = std::numeric_limits<int>::max(),
+	                      int precision            = 4) const;
 
  private:
 	struct TimingNL {
@@ -250,7 +246,7 @@ class Timing : public Timer
 	void timingsRecurs(std::vector<TimingNL>& data, std::size_t num, int level) const;
 
 	void addTags(std::vector<std::string>& data, std::vector<TimingNL> const& timers,
-	             std::size_t start_numbering_level, std::size_t stop_numbering_level) const;
+	             int start_numbering_level, int stop_numbering_level) const;
 
 	template <class Period>
 	void addTotal(std::vector<std::string>& data, std::vector<TimingNL> const& timers,
@@ -288,7 +284,7 @@ class Timing : public Timer
 		}
 	}
 
-	template <class Period >
+	template <class Period>
 	void addStd(std::vector<std::string>& data, std::vector<TimingNL> const& timers,
 	            int precision) const
 	{
@@ -300,7 +296,7 @@ class Timing : public Timer
 		}
 	}
 
-	template <class Period >
+	template <class Period>
 	void addMin(std::vector<std::string>& data, std::vector<TimingNL> const& timers,
 	            int precision) const
 	{
@@ -312,7 +308,7 @@ class Timing : public Timer
 		}
 	}
 
-	template <class Period >
+	template <class Period>
 	void addMax(std::vector<std::string>& data, std::vector<TimingNL> const& timers,
 	            int precision) const
 	{
@@ -332,8 +328,8 @@ class Timing : public Timer
 	std::pair<int, int> centeringPadding(std::string const& str, int max_width) const;
 
  private:
-	std::map<std::size_t, Timing> timer_;
 	std::string                   tag_;
+	std::map<std::size_t, Timing> timer_;
 	std::string                   color_;
 };
 }  // namespace ufo

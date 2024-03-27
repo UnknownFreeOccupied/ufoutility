@@ -52,6 +52,9 @@ install/*
 # Data folder
 data/*
 
+# Docs
+docs/html/*
+
 # coverage report
 coverage_report/*
 .coverage/
