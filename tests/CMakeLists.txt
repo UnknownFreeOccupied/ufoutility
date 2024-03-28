@@ -18,9 +18,9 @@ include(CTest)
 include(Catch)
 catch_discover_tests(ufoutility_tests)
 
-add_custom_command(
-	TARGET ufoutility_tests
-	COMMENT "Running UFO utility tests"
-	POST_BUILD 
-	COMMAND ufoutility_tests
-)
+# add_custom_command(
+# 	TARGET ufoutility_tests
+# 	COMMENT "Running UFO utility tests"
+# 	POST_BUILD 
+# 	COMMAND ufoutility_tests
+# )
