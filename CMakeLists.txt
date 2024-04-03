@@ -13,8 +13,6 @@ project(ufoutility
 )
 
 add_library(ufoutility SHARED 
-	src/timer.cpp
-	src/timing.cpp
 	src/io/read_buffer.cpp
 	src/io/write_buffer.cpp
 	src/io/buffer.cpp
