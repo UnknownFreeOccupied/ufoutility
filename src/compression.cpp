@@ -40,13 +40,10 @@
  */
 
 // UFO
-#include <ufo/util/compression.hpp>
+#include <ufo/utility/compression.hpp>
 
 // STL
-#include <fstream>
 #include <memory>
-#include <sstream>
-#include <stdexcept>
 
 // LZ4 compression
 #include <lz4.h>

@@ -43,20 +43,11 @@
 #define UFO_UTILITY_COMPRESSION_HPP
 
 // UFO
-#include <ufo/util/buffer.hpp>
+#include <ufo/utility/io/buffer.hpp>
 
 // STL
-#if __cplusplus >= 202002L
-#include <bit>
-#endif
 #include <cstring>
-#include <filesystem>
 #include <iostream>
-#include <map>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <string_view>
 
 namespace ufo
 {
