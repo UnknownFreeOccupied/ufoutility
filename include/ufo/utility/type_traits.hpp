@@ -154,15 +154,15 @@ template <class T, class... Rest>
 inline constexpr bool is_unique_v = is_unique<T, Rest...>::value;
 
 //
-// Contains
+// Contains type
 //
 
 template <class T, class... Ts>
-struct contains : std::disjunction<std::is_same<T, Ts>...> {
+struct contains_type : std::disjunction<std::is_same<T, Ts>...> {
 };
 
 template <class T, class... Ts>
-inline constexpr bool contains_v = contains<T, Ts...>::value;
+inline constexpr bool contains_type_v = contains_type<T, Ts...>::value;
 }  // namespace ufo
 
 #endif  // UFO_UTILITY_TYPE_TRAITS
