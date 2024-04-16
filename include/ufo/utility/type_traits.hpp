@@ -152,6 +152,17 @@ struct is_unique<T, Rest...> {
 
 template <class T, class... Rest>
 inline constexpr bool is_unique_v = is_unique<T, Rest...>::value;
+
+//
+// Contains
+//
+
+template <class T, class... Ts>
+struct contains : std::disjunction<std::is_same<T, Ts>...> {
+};
+
+template <class T, class... Ts>
+inline constexpr bool contains_v = contains<T, Ts...>::value;
 }  // namespace ufo
 
 #endif  // UFO_UTILITY_TYPE_TRAITS
