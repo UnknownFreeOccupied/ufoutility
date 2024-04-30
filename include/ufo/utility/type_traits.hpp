@@ -119,24 +119,6 @@ template <class T>
 inline constexpr bool is_pair_v = is_pair<T>::value;
 
 //
-// Base of template
-//
-
-template <template <class, std::size_t> class Base, class Derived>
-struct is_base_of_template_impl {
-	template <class T, std::size_t N>
-	static constexpr std::true_type  test(Base<T, N> const*);
-	static constexpr std::false_type test(...);
-	using type = decltype(test(std::declval<Derived*>()));
-};
-
-template <template <class, std::size_t> class Base, class Derived>
-using is_base_of_template = typename is_base_of_template_impl<Base, Derived>::type;
-
-template <template <class, std::size_t> class Base, class Derived>
-inline constexpr bool is_base_of_template_v = is_base_of_template<Base, Derived>::value;
-
-//
 // Is unique
 //
 
