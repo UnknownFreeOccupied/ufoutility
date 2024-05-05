@@ -44,8 +44,13 @@
 
 // STL
 #include <type_traits>
-#if defined(UFO_PARALLEL)
+#if defined(UFO_TBB)
 #include <execution>
+#endif
+
+// OMP
+#if defined(UFO_OMP)
+#include <omp.h>
 #endif
 
 namespace ufo
