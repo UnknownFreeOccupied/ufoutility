@@ -88,6 +88,40 @@
 		UFO_MIN_8(c);                \
 	}
 
+#define UFO_MIN_PAIR_FIRST_2(c)            \
+	{                                        \
+		c[0] = UFO_MIN_PAIR_FIRST(c[0], c[1]); \
+	}
+
+#define UFO_MIN_PAIR_FIRST_4(c)            \
+	{                                        \
+		c[0] = UFO_MIN_PAIR_FIRST(c[0], c[2]); \
+		c[1] = UFO_MIN_PAIR_FIRST(c[1], c[3]); \
+		UFO_MIN_PAIR_FIRST_2(c);               \
+	}
+
+#define UFO_MIN_PAIR_FIRST_8(c)            \
+	{                                        \
+		c[0] = UFO_MIN_PAIR_FIRST(c[0], c[4]); \
+		c[1] = UFO_MIN_PAIR_FIRST(c[1], c[5]); \
+		c[2] = UFO_MIN_PAIR_FIRST(c[2], c[6]); \
+		c[3] = UFO_MIN_PAIR_FIRST(c[3], c[7]); \
+		UFO_MIN_PAIR_FIRST_4(c);               \
+	}
+
+#define UFO_MIN_PAIR_FIRST_16(c)            \
+	{                                         \
+		c[0] = UFO_MIN_PAIR_FIRST(c[0], c[8]);  \
+		c[1] = UFO_MIN_PAIR_FIRST(c[1], c[9]);  \
+		c[2] = UFO_MIN_PAIR_FIRST(c[2], c[10]); \
+		c[3] = UFO_MIN_PAIR_FIRST(c[3], c[11]); \
+		c[4] = UFO_MIN_PAIR_FIRST(c[4], c[12]); \
+		c[5] = UFO_MIN_PAIR_FIRST(c[5], c[13]); \
+		c[6] = UFO_MIN_PAIR_FIRST(c[6], c[14]); \
+		c[7] = UFO_MIN_PAIR_FIRST(c[7], c[15]); \
+		UFO_MIN_PAIR_FIRST_8(c);                \
+	}
+
 #define UFO_SORT_ASCENDING_PAIR_FIRST_2(c)       \
 	{                                              \
 		UFO_SORT_ASCENDING_PAIR_FIRST_SWAP(c, 0, 1); \
