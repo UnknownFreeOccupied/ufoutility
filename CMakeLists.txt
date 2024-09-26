@@ -30,6 +30,15 @@ target_compile_definitions(ufoutility
 		UFO_TBB=1
 )
 
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(ufoutility PUBLIC OpenMP::OpenMP_CXX)
+		target_compile_definitions(ufoutility
+			PUBLIC
+				UFO_OMP=1
+		)
+endif()
+
 set_target_properties(ufoutility PROPERTIES
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${PROJECT_VERSION_MAJOR}
