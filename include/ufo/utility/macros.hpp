@@ -42,11 +42,11 @@
 #ifndef UFO_UTILITY_MACROS
 #define UFO_UTILITY_MACROS
 
-#define UFO_MIN(a, b)            (a < b ? a : b)
-#define UFO_MAX(a, b)            (a < b ? b : a)
+#define UFO_MIN(a, b)            ((a) < (b) ? (a) : (b))
+#define UFO_MAX(a, b)            ((a < b) ? (b) : (a))
 #define UFO_CLAMP(v, lo, hi)     UFO_MAX(lo, UFO_MIN(hi, v))
-#define UFO_MIN_PAIR_FIRST(a, b) (a.first < b.first ? a : b)
-#define UFO_MAX_PAIR_FIRST(a, b) (a.first < b.first ? b : a)
+#define UFO_MIN_PAIR_FIRST(a, b) ((a).first < (b).first ? (a) : (b))
+#define UFO_MAX_PAIR_FIRST(a, b) ((a).first < (b).first ? (b) : (a))
 #define UFO_SORT_ASCENDING_PAIR_FIRST_SWAP(c, i, j) \
 	{                                                 \
 		auto const a = UFO_MIN_PAIR_FIRST(c[i], c[j]);  \
@@ -57,6 +57,12 @@
 #define UFO_MIN_2(c)            \
 	{                             \
 		c[0] = UFO_MIN(c[0], c[1]); \
+	}
+
+#define UFO_MIN_3(c)            \
+	{                             \
+		c[0] = UFO_MIN(c[0], c[2]); \
+		UFO_MIN_2(c);               \
 	}
 
 #define UFO_MIN_4(c)            \
