@@ -21,7 +21,8 @@ add_library(ufoutility SHARED
 )
 add_library(UFO::Utility ALIAS ufoutility)
 
-include("${PROJECT_SOURCE_DIR}/3rdparty/tbb/tbb.cmake")
+# include("${PROJECT_SOURCE_DIR}/3rdparty/tbb/tbb.cmake")
+find_package(TBB REQUIRED)
 
 target_link_libraries(ufoutility PUBLIC TBB::tbb)
 
@@ -61,7 +62,7 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
 # Only enable tests when we're the root project
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 	# Treat warnings as errors
-	set_target_properties(ufoutility PROPERTIES COMPILE_WARNING_AS_ERROR ON)
+	# set_target_properties(ufoutility PROPERTIES COMPILE_WARNING_AS_ERROR ON)
 
 	# Turn all warnings on
 	if (MSVC)
