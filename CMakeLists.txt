@@ -14,68 +14,68 @@ project(ufoutility
 
 add_subdirectory(3rdparty)
 
-add_library(ufoutility SHARED 
+add_library(Utility SHARED 
 	src/io/read_buffer.cpp
 	src/io/write_buffer.cpp
 	src/io/buffer.cpp
 )
-add_library(UFO::Utility ALIAS ufoutility)
+add_library(UFO::Utility ALIAS Utility)
 
 # include("${PROJECT_SOURCE_DIR}/3rdparty/tbb/tbb.cmake")
 find_package(TBB REQUIRED)
 
-target_link_libraries(ufoutility PUBLIC TBB::tbb)
+target_link_libraries(Utility PUBLIC TBB::tbb)
 
-target_compile_definitions(ufoutility
+target_compile_definitions(Utility
 	PUBLIC
 		UFO_TBB=1
 )
 
-find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(ufoutility PUBLIC OpenMP::OpenMP_CXX)
-		target_compile_definitions(ufoutility
-			PUBLIC
-				UFO_OMP=1
-		)
-endif()
+# find_package(OpenMP)
+# if(OpenMP_CXX_FOUND)
+#     target_link_libraries(Utility PUBLIC OpenMP::OpenMP_CXX)
+# 		target_compile_definitions(Utility
+# 			PUBLIC
+# 				UFO_OMP=1
+# 		)
+# endif()
 
-set_target_properties(ufoutility PROPERTIES
+set_target_properties(Utility PROPERTIES
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${PROJECT_VERSION_MAJOR}
 	CXX_STANDARD 17
 	CXX_EXTENSIONS OFF
 )
 
-target_include_directories(ufoutility PUBLIC
+target_include_directories(Utility PUBLIC
 	$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
 )
 
-target_compile_features(ufoutility PUBLIC cxx_std_17)
+target_compile_features(Utility PUBLIC cxx_std_17)
 
 include(GNUInstallDirs)
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Only enable tests when we're the root project
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-	# Treat warnings as errors
-	# set_target_properties(ufoutility PROPERTIES COMPILE_WARNING_AS_ERROR ON)
+# # Only enable tests when we're the root project
+# if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+# 	# Treat warnings as errors
+# 	# set_target_properties(Utility PROPERTIES COMPILE_WARNING_AS_ERROR ON)
 
-	# Turn all warnings on
-	if (MSVC)
-		target_compile_options(ufoutility PUBLIC /W4)
-	else()
-		target_compile_options(ufoutility PUBLIC -Wall -Wextra -pedantic)
-	endif()
+# 	# Turn all warnings on
+# 	if (MSVC)
+# 		target_compile_options(Utility PUBLIC /W4)
+# 	else()
+# 		target_compile_options(Utility PUBLIC -Wall -Wextra -pedantic)
+# 	endif()
 
-	add_subdirectory(docs)
-  add_subdirectory(tests)
-endif()
+# 	add_subdirectory(docs)
+#   add_subdirectory(tests)
+# endif()
 
-install(TARGETS ufoutility
+install(TARGETS Utility
 	EXPORT ufoutilityTargets
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
