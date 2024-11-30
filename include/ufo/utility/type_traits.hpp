@@ -181,6 +181,18 @@ struct is_one_of
 template <class T, class... Types>
 constexpr inline bool is_one_of_v = is_one_of<T, Types...>::value;
 
+//
+// Remove const, volatile, and reference
+//
+
+template <class T>
+struct remove_cvref {
+	using type = std::remove_cv_t<std::remove_reference_t<T>>;
+};
+
+template <class T>
+using remove_cvref_t = typename remove_cvref<T>::type;
+
 }  // namespace ufo
 
 #endif  // UFO_UTILITY_TYPE_TRAITS
