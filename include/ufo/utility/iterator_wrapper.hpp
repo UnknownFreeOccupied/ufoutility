@@ -53,29 +53,29 @@ namespace ufo
  *
  * @tparam The iterator that should be wrapped.
  */
-template <class Iterator>
+template <class FirstIt, class LastIt = FirstIt>
 class IteratorWrapper
 {
  public:
 	constexpr IteratorWrapper() = default;
 
-	constexpr IteratorWrapper(Iterator const& first, Iterator const& last)
+	constexpr IteratorWrapper(FirstIt const& first, LastIt const& last)
 	    : first_(first), last_(last)
 	{
 	}
 
-	constexpr IteratorWrapper(Iterator&& first, Iterator&& last)
+	constexpr IteratorWrapper(FirstIt&& first, LastIt&& last)
 	    : first_(std::move(first)), last_(std::move(last))
 	{
 	}
 
-	[[nodiscard]] Iterator begin() const { return first_; }
+	[[nodiscard]] FirstIt begin() const { return first_; }
 
-	[[nodiscard]] Iterator end() const { return last_; }
+	[[nodiscard]] LastIt end() const { return last_; }
 
  private:
-	Iterator first_;
-	Iterator last_;
+	FirstIt first_;
+	LastIt  last_;
 };
 }  // namespace ufo
 
