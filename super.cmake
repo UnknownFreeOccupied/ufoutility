@@ -18,6 +18,13 @@ if(TBB_FOUND)
 	)
 endif()
 
+if(APPLE)
+	target_compile_definitions(Utility
+		PUBLIC
+			UFO_GCD=1
+	)
+endif()
+
 # find_package(OpenMP)
 # if(OpenMP_CXX_FOUND)
 #     target_link_libraries(Utility PUBLIC OpenMP::OpenMP_CXX)

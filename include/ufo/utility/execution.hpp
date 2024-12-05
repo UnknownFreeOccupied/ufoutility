@@ -55,6 +55,11 @@
 #define UFO_TBB_PAR_UNSEQ
 #endif
 
+// GCD (Grand Central Dispatch)
+#if defined(UFO_GCD)
+#include <dispatch/dispatch.h>
+#endif
+
 // OMP
 #if defined(UFO_OMP)
 #include <omp.h>
@@ -64,7 +69,7 @@ namespace ufo::execution
 {
 namespace detail
 {
-enum class ExecutionPolicy { NONE, SEQ, TBB, OMP, OFFLOAD };
+enum class ExecutionPolicy { NONE, SEQ, TBB, GCD, OMP, OFFLOAD };
 }
 
 // sequenced execution policy
@@ -75,6 +80,14 @@ struct sequenced_policy {
 struct tbb_policy {
 #if defined(UFO_TBB)
 	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::TBB;
+#else
+	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::NONE;
+#endif
+};
+
+struct gcd_policy {
+#if defined(UFO_GCD)
+	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::GCD;
 #else
 	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::NONE;
 #endif
@@ -94,17 +107,10 @@ struct parallel_policy
     , omp_policy {
 #if defined(UFO_TBB)
 	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::TBB;
+#elif defined(UFO_GCD)
+	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::GCD;
 #elif defined(UFO_OMP)
 	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::OMP;
-#else
-	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::NONE;
-#endif
-};
-
-// offload execution policy
-struct offload_policy {
-#if defined(UFO_WEBGPU)
-	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::OFFLOAD;
 #else
 	static constexpr detail::ExecutionPolicy policy = detail::ExecutionPolicy::NONE;
 #endif
@@ -119,9 +125,9 @@ struct is_execution_policy<
     T, std::enable_if_t<detail::ExecutionPolicy::NONE != std::decay_t<T>::policy>>
     : std::disjunction<std::is_same<execution::sequenced_policy, std::decay_t<T>>,
                        std::is_same<execution::tbb_policy, std::decay_t<T>>,
+                       std::is_same<execution::gcd_policy, std::decay_t<T>>,
                        std::is_same<execution::omp_policy, std::decay_t<T>>,
-                       std::is_same<execution::parallel_policy, std::decay_t<T>>,
-                       std::is_same<execution::offload_policy, std::decay_t<T>>> {
+                       std::is_same<execution::parallel_policy, std::decay_t<T>>> {
 };
 
 template <class T>
@@ -134,20 +140,19 @@ template <class T>
 constexpr inline bool is_tbb_v = detail::ExecutionPolicy::TBB == std::decay_t<T>::policy;
 
 template <class T>
+constexpr inline bool is_gcd_v = detail::ExecutionPolicy::GCD == std::decay_t<T>::policy;
+
+template <class T>
 constexpr inline bool is_omp_v = detail::ExecutionPolicy::OMP == std::decay_t<T>::policy;
 
 template <class T>
-constexpr inline bool is_par_v = is_tbb_v<T> || is_omp_v<T>;
-
-template <class T>
-constexpr inline bool is_offload_v =
-    detail::ExecutionPolicy::OFFLOAD == std::decay_t<T>::policy;
+constexpr inline bool is_par_v = is_tbb_v<T> || is_gcd_v<T> || is_omp_v<T>;
 
 constexpr inline sequenced_policy seq{};
 constexpr inline tbb_policy       tbb{};
+constexpr inline gcd_policy       gcd{};
 constexpr inline omp_policy       omp{};
 constexpr inline parallel_policy  par{};
-constexpr inline offload_policy   offload{};
 }  // namespace ufo::execution
 
 #endif  // UFO_UTILITY_EXECUTION_HPP
