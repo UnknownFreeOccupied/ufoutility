@@ -46,6 +46,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <istream>
+#include <memory>
 
 namespace ufo
 {
@@ -54,9 +55,16 @@ class WriteBuffer
  public:
 	using size_type = std::size_t;
 
-	virtual ~WriteBuffer();
+	WriteBuffer() = default;
+	WriteBuffer(WriteBuffer const& other);
+	WriteBuffer(WriteBuffer&&) = default;
 
-	template <typename T>
+	WriteBuffer& operator=(WriteBuffer const& rhs);
+	WriteBuffer& operator=(WriteBuffer&&) = default;
+
+	virtual ~WriteBuffer() = default;
+
+	template <class T>
 	WriteBuffer& write(T const& t)
 	{
 		return write(&t, sizeof(t));
@@ -91,10 +99,14 @@ class WriteBuffer
 	[[nodiscard]] size_type writeLeft() const noexcept;
 
  protected:
-	std::byte* data_ = nullptr;
-	size_type  size_{};
-	size_type  cap_{};
-	size_type  pos_{};
+	struct FreeDeleter {
+		void operator()(void* p) const noexcept { std::free(p); }
+	};
+
+	std::unique_ptr<std::byte, FreeDeleter> data_;
+	size_type                               size_{};
+	size_type                               cap_{};
+	size_type                               pos_{};
 };
 }  // namespace ufo
 #endif  // UFO_UTILITY_WRITE_BUFFER_HPP

@@ -6,20 +6,29 @@
 
 namespace ufo
 {
-WriteBuffer::~WriteBuffer()
+
+WriteBuffer::WriteBuffer(WriteBuffer const& other)
 {
-	if (data_) {
-		free(data_);
+	if (other.data_) {
+		write(other.data_.get(), other.size_);
 	}
+}
+
+WriteBuffer& WriteBuffer::operator=(WriteBuffer const& rhs)
+{
+	size_ = {};
+	pos_  = {};
+	if (rhs.data_) {
+		write(rhs.data_.get(), rhs.size_);
+	}
+	return *this;
 }
 
 WriteBuffer& WriteBuffer::write(void const* src, size_type count)
 {
-	if (capacity() < pos_ + count) {
-		reserve(pos_ + count);
-	}
+	reserve(pos_ + count);
 
-	std::memmove(data_ + pos_, src, count);
+	std::memmove(data_.get() + pos_, src, count);
 
 	pos_ += count;
 	size_ = std::max(size_, pos_);
@@ -29,11 +38,9 @@ WriteBuffer& WriteBuffer::write(void const* src, size_type count)
 
 WriteBuffer& WriteBuffer::write(std::istream& in, size_type count)
 {
-	if (capacity() < pos_ + count) {
-		reserve(pos_ + count);
-	}
+	reserve(pos_ + count);
 
-	in.read(reinterpret_cast<char*>(data_), static_cast<std::streamsize>(count));
+	in.read(reinterpret_cast<char*>(data_.get()), static_cast<std::streamsize>(count));
 
 	pos_ += count;
 	size_ = std::max(size_, pos_);
@@ -47,9 +54,11 @@ void WriteBuffer::reserve(size_type new_cap)
 		return;
 	}
 
-	if (auto p_new = static_cast<std::byte*>(realloc(data_, new_cap * sizeof(std::byte)))) {
-		data_ = p_new;
-		cap_  = new_cap;
+	if (auto p_new =
+	        static_cast<std::byte*>(realloc(data_.get(), new_cap * sizeof(std::byte)))) {
+		data_.release();
+		data_.reset(p_new);
+		cap_ = new_cap;
 	} else {
 		throw std::bad_alloc();
 	}
@@ -67,9 +76,9 @@ void WriteBuffer::clear()
 	pos_  = 0;
 }
 
-std::byte* WriteBuffer::data() { return data_; }
+std::byte* WriteBuffer::data() { return data_.get(); }
 
-std::byte const* WriteBuffer::data() const { return data_; }
+std::byte const* WriteBuffer::data() const { return data_.get(); }
 
 bool WriteBuffer::empty() const { return 0 == size(); }
 
