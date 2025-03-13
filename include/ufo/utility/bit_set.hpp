@@ -198,6 +198,12 @@ class BitSet
 
 	constexpr void set() noexcept { set_ = ALL_SET; }
 
+	constexpr void set(std::size_t pos, bool value)
+	{
+		assert(N > pos);
+		set_ ^= static_cast<T>(-static_cast<T>(value) ^ set_) & static_cast<T>(T(1) << pos);
+	}
+
 	constexpr void set(std::size_t pos)
 	{
 		assert(N > pos);
