@@ -43,8 +43,10 @@
 #define UFO_UTILITY_TYPE_TRAITS
 
 // STL
+#include <cstddef>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -169,6 +171,29 @@ struct contains_type : std::disjunction<std::is_same<T, Ts>...> {
 
 template <class T, class... Ts>
 constexpr inline bool contains_type_v = contains_type<T, Ts...>::value;
+
+//
+// Contains convertible type
+//
+
+template <class T, class... Ts>
+struct contains_convertible_type : std::disjunction<std::is_convertible<T, Ts>...> {
+};
+
+template <class T, class... Ts>
+constexpr inline bool contains_convertible_type_v =
+    contains_convertible_type<T, Ts...>::value;
+
+//
+// Index type
+//
+
+template <std::size_t I, class... Ts>
+struct index_type : std::tuple_element<I, std::tuple<Ts...>> {
+};
+
+template <std::size_t I, class... Ts>
+using index_type_t = typename index_type<I, Ts...>::type;
 
 //
 // Remove const, volatile, and reference
